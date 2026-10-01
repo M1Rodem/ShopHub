@@ -1,0 +1,66 @@
+﻿@model ShopHub.Models.Order
+@{
+    ViewData["Title"] = $"Заказ №{Model.Id}";
+
+    string StatusClass(string s) => s switch
+    {
+        "Created" => "secondary",
+        "Paid" => "info",
+        "Shipped" => "primary",
+        "Completed" => "success",
+        "Cancelled" => "danger",
+        _ => "secondary"
+    };
+
+    string StatusRu(string s) => s switch
+    {
+        "Created" => "Создан",
+        "Paid" => "Оплачен",
+        "Shipped" => "Отправлен",
+        "Completed" => "Завершён",
+        "Cancelled" => "Отменён",
+        _ => s
+    };
+}
+
+<h2 class="mb-3">Заказ №@Model.Id</h2>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <p><strong>Дата:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Статус:</strong> <span class="badge bg-@StatusClass(Model.Status)">@StatusRu(Model.Status)</span></p>
+        <p><strong>Адрес доставки:</strong> @Model.ShippingAddress</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <p class="h4">Итого: @Model.TotalAmount.ToString("N0") ₽</p>
+
+        @if (Model.Status == "Created")
+        {
+            <a asp-controller="Payment" asp-action="Pay" asp-route-orderId="@Model.Id"
+               class="btn btn-success">Оплатить</a>
+        }
+    </div>
+</div>
+
+<h4>Состав заказа</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Цена на момент покупки</th>
+            <th>Кол-во</th>
+            <th class="text-end">Сумма</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.PriceAtPurchase.ToString("N0") ₽</td>
+                <td>@item.Quantity</td>
+                <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("N0")) ₽</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,39 @@
+﻿@model ShopHub.Models.Order
+@{
+    ViewData["Title"] = "Оплата заказа";
+}
+
+<h2 class="mb-4">Оплата заказа №@Model.Id</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Сумма к оплате</h5>
+                <p class="h3">@Model.TotalAmount.ToString("N0") ₽</p>
+                <p class="text-muted">Адрес: @Model.ShippingAddress</p>
+            </div>
+        </div>
+
+        <form asp-action="Pay" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="orderId" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Способ оплаты</label>
+                <select name="provider" class="form-select" required>
+                    <option value="Stripe">Stripe (карта)</option>
+                    <option value="YooKassa">ЮKassa</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg w-100">
+                Оплатить @Model.TotalAmount.ToString("N0") ₽
+            </button>
+        </form>
+
+        <p class="text-muted small mt-3">
+            ⚠️ Демо-режим: реальный платёж не производится, статус устанавливается автоматически.
+        </p>
+    </div>
+</div>

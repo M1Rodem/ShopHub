@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Добро пожаловать в ShopHub</h1>
+    <p class="lead">Интернет-магазин, который умеет всё: каталог, корзина, заказы, оплата.</p>
+
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg" asp-controller="Product" asp-action="Index">
+            Перейти в каталог
+        </a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">📦 Каталог</h5>
+                <p class="card-text">Тысячи товаров в разных категориях. Ищи, выбирай, покупай.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">🛒 Корзина</h5>
+                <p class="card-text">Складывай товары, меняй количество, оформляй заказ.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">💳 Оплата</h5>
+                <p class="card-text">Оплачивай удобным способом через одного из провайдеров.</p>
+            </div>
+        </div>
+    </div>
+</div>

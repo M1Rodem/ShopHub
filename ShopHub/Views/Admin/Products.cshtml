@@ -1,0 +1,57 @@
+﻿@model List<ShopHub.Models.Product>
+@{
+    ViewData["Title"] = "Товары";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📦 Товары (@Model.Count)</h2>
+    <a asp-action="CreateProduct" class="btn btn-success">➕ Новый товар</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Товаров пока нет. Создайте первый!</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Категория</th>
+                <th class="text-end">Цена</th>
+                <th class="text-end">Остаток</th>
+                <th>Активен</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Name</td>
+                    <td>@p.Category?.Name</td>
+                    <td class="text-end">@p.Price.ToString("N0") ₽</td>
+                    <td class="text-end">@p.Stock</td>
+                    <td>
+                        <span class="badge bg-@(p.IsActive ? "success" : "secondary")">
+                            @(p.IsActive ? "Да" : "Нет")
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a asp-action="EditProduct" asp-route-id="@p.Id"
+                           class="btn btn-sm btn-outline-primary">✏️</a>
+                        <form asp-action="DeleteProduct" asp-route-id="@p.Id"
+                              method="post" class="d-inline"
+                              onsubmit="return confirm('Деактивировать товар?');">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-sm btn-outline-danger">🗑</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

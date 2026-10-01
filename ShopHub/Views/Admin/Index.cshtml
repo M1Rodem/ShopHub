@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Админка";
+}
+
+<h2 class="mb-4">⚙️ Панель администратора</h2>
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">📦 Товары</h5>
+                <p class="display-6">@ViewBag.ProductsCount</p>
+                <a asp-action="Products" class="btn btn-primary">Управлять</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">👥 Пользователи</h5>
+                <p class="display-6">@ViewBag.UsersCount</p>
+                <a asp-action="Users" class="btn btn-primary">Список</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">📊 Отчёты</h5>
+                <p class="display-6">→</p>
+                <a asp-controller="Report" asp-action="Index" class="btn btn-primary">Открыть</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">➕ Новый товар</h5>
+                <p class="display-6">→</p>
+                <a asp-action="CreateProduct" class="btn btn-success">Создать</a>
+            </div>
+        </div>
+    </div>
+</div>

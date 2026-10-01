@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Оформление заказа";
+}
+
+<h2 class="mb-4">Оформление заказа</h2>
+
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@err.ErrorMessage</div>
+        }
+    </div>
+}
+
+<form asp-action="Checkout" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">Адрес доставки</label>
+        <textarea name="shippingAddress" class="form-control" rows="3"
+                  required placeholder="Город, улица, дом, квартира"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg">Подтвердить и перейти к оплате</button>
+    <a asp-controller="Cart" asp-action="Index" class="btn btn-link">Вернуться в корзину</a>
+</form>

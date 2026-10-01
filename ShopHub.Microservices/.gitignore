@@ -1,0 +1,21 @@
+# .NET build artifacts
+bin/
+obj/
+*.user
+*.suo
+
+# Rider/VS
+.vs/
+.idea/
+
+# Секреты
+.env
+*.env.local
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Логи
+*.log

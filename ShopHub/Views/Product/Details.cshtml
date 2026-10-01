@@ -1,0 +1,115 @@
+﻿@model ShopHub.Models.Product
+@{
+    ViewData["Title"] = Model.Name;
+    var reviews = ViewBag.Reviews as List<ShopHub.Models.Review> ?? new();
+    double avg = ViewBag.AverageRating ?? 0.0;
+    bool isAuth = User.Identity?.IsAuthenticated == true;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Каталог</a></li>
+        <li class="breadcrumb-item active">@Model.Name</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-7">
+        <h1>@Model.Name</h1>
+        <p class="text-muted">@Model.Category?.Name</p>
+        <p>@Model.Description</p>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="h3 mb-0">@Model.Price.ToString("N0") ₽</span>
+                    <span class="badge bg-@(Model.Stock > 0 ? "success" : "secondary")">
+                        @(Model.Stock > 0 ? $"в наличии: {Model.Stock}" : "нет в наличии")
+                    </span>
+                </div>
+
+                @if (Model.Stock > 0 && isAuth)
+                {
+                    <form asp-controller="Cart" asp-action="Add" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <div class="input-group mb-2">
+                            <span class="input-group-text">Кол-во</span>
+                            <input name="quantity" type="number" min="1" max="@Model.Stock"
+                                   value="1" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            🛒 Добавить в корзину
+                        </button>
+                    </form>
+                }
+                else if (!isAuth)
+                {
+                    <a asp-controller="Account" asp-action="Login"
+                       class="btn btn-primary w-100">Войдите, чтобы купить</a>
+                }
+                else
+                {
+                    <button class="btn btn-secondary w-100" disabled>Нет в наличии</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5" />
+
+<h3>Отзывы (@reviews.Count) — рейтинг @avg.ToString("0.0") ⭐</h3>
+
+@if (isAuth)
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Оставить отзыв</h5>
+            <form asp-controller="Review" asp-action="Add" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="productId" value="@Model.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label">Оценка</label>
+                    <select name="rating" class="form-select" required>
+                        <option value="5">5 — отлично</option>
+                        <option value="4">4 — хорошо</option>
+                        <option value="3">3 — нормально</option>
+                        <option value="2">2 — плохо</option>
+                        <option value="1">1 — ужасно</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Комментарий</label>
+                    <textarea name="text" class="form-control" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+    </div>
+}
+
+@if (!reviews.Any())
+{
+    <p class="text-muted">Отзывов пока нет. Будьте первым!</p>
+}
+else
+{
+    foreach (var r in reviews)
+    {
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <strong>@(r.User != null ? $"{r.User.FirstName} {r.User.LastName}" : "Аноним")</strong>
+                    <span>@(new string('⭐', r.Rating)) <small class="text-muted">@r.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</small></span>
+                </div>
+                <p class="mb-0 mt-2">@r.Text</p>
+            </div>
+        </div>
+    }
+}

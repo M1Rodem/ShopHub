@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/*.user
+**/data/
+**/.git/
+**/.gitignore
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.md
+docker-compose*.yml
+.env
+.env.example

@@ -1,0 +1,38 @@
+﻿@model List<ShopHub.Models.User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<h2 class="mb-4">👥 Пользователи (@Model.Count)</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Роль</th>
+            <th>Регистрация</th>
+            <th>Последний вход</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Id</td>
+                <td>@u.Email</td>
+                <td>@u.FirstName @u.LastName</td>
+                <td>@u.Phone</td>
+                <td>
+                    <span class="badge bg-@(u.Role == "Admin" ? "danger" : "secondary")">
+                        @u.Role
+                    </span>
+                </td>
+                <td>@u.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</td>
+                <td>@(u.LastLogin?.ToLocalTime().ToString("dd.MM.yyyy HH:mm") ?? "—")</td>
+            </tr>
+        }
+    </tbody>
+</table>

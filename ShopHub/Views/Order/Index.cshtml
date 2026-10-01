@@ -1,0 +1,60 @@
+﻿@model List<ShopHub.Models.Order>
+@{
+    ViewData["Title"] = "Мои заказы";
+
+    string StatusClass(string s) => s switch
+    {
+        "Created" => "secondary",
+        "Paid" => "info",
+        "Shipped" => "primary",
+        "Completed" => "success",
+        "Cancelled" => "danger",
+        _ => "secondary"
+    };
+
+    string StatusRu(string s) => s switch
+    {
+        "Created" => "Создан",
+        "Paid" => "Оплачен",
+        "Shipped" => "Отправлен",
+        "Completed" => "Завершён",
+        "Cancelled" => "Отменён",
+        _ => s
+    };
+}
+
+<h2 class="mb-4">Мои заказы</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">У вас пока нет заказов.</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th class="text-end">Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td>@o.Id</td>
+                    <td>@o.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td><span class="badge bg-@StatusClass(o.Status)">@StatusRu(o.Status)</span></td>
+                    <td class="text-end">@o.TotalAmount.ToString("N0") ₽</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@o.Id"
+                           class="btn btn-sm btn-outline-primary">Детали</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
